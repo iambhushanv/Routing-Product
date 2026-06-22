@@ -1,0 +1,27 @@
+
+<div class="row">
+    <div class="col-12 text-right mb-4">
+        <button
+        routerLink="addUser"
+         mat-raised-button color="primary">Add User</button>
+    </div>
+    <div class="col-md-4">
+        <ul class="list-group">
+            <li
+            [routerLink]="[user.userId]"
+             class="list-group-item" *ngFor="let user of userArr">
+                {{user.userName}}
+                 <small class="badge"
+                [ngClass]="{
+                    'badge-success' : user.isActive,
+                    'badge-danger' : !user.isActive
+                }"
+                >{{user.isActive ? 'Yes': 'No'}}</small>
+                {{user.userId}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-8">
+        USERS_DETAILS
+    </div>
+</div>

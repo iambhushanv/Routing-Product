@@ -12,46 +12,50 @@ import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit {
-  isInEditMode : boolean = false
+  isInEditMode: boolean = false
   productForm !: FormGroup
   productId !: string
   productObj !: Iproduct
-  disableUpdateBtn : boolean = false
-  
+  disableUpdateBtn: boolean = false
+
   constructor(
     private _productService: ProductsService,
     private _router: Router,
-    private _routes : ActivatedRoute,
-    private _snackBar : SnackBarService
+    private _routes: ActivatedRoute,
+    private _snackBar: SnackBarService
   ) { }
 
   ngOnInit(): void {
     this.createProductForm()
     this.patchProductData()
-    this._routes.queryParams
-     .subscribe( res => {
-     if(res['cr'] == 0){
-      this.productForm.disable()
-      this.disableUpdateBtn = true
-     }else{
-      this.productForm.enable()
-      this.disableUpdateBtn = false
-     }
-      
-    })
-     }
+    this.CanReturnHandler()
+  }
 
-  patchProductData(){
-     this.productId = this._routes.snapshot.paramMap.get('id')!
-    if(this.productId){
+  CanReturnHandler() {
+       this._routes.queryParams
+      .subscribe(res => {
+        if (res['cr'] == 0) {
+          this.productForm.disable()
+          this.disableUpdateBtn = true
+        } else {
+          this.productForm.enable()
+          this.disableUpdateBtn = false
+        }
+
+      })
+  }
+
+  patchProductData() {
+    this.productId = this._routes.snapshot.paramMap.get('id')!
+    if (this.productId) {
       this.isInEditMode = true
     }
     this._productService.fetchProductById(this.productId)
-    .subscribe({
-      next : res => {
-        this.productForm.patchValue(res)
-      }
-    })
+      .subscribe({
+        next: res => {
+          this.productForm.patchValue(res)
+        }
+      })
   }
 
   createProductForm() {
@@ -60,6 +64,10 @@ export class ProductFormComponent implements OnInit {
       pstatus: new FormControl('In-Progress'),
       canReturn: new FormControl(1,),
     })
+  }
+
+  get formControls(){
+    return this.productForm.controls 
   }
 
   onProductAdd() {
@@ -81,23 +89,23 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
-  onUpdate(){
-    if(this.productForm.invalid){
+  onUpdate() {
+    if (this.productForm.invalid) {
       this.productForm.markAllAsTouched()
-    }else{
-      let updatedObj : Iproduct = {...this.productForm.value, pid: this.productId}
+    } else {
+      let updatedObj: Iproduct = { ...this.productForm.value, pid: this.productId }
       this._productService.onUpdate(updatedObj)
-      .subscribe({
-        next : res => {
-           this._snackBar.openSnackBar(res.msg)
-          this.isInEditMode = false
-          this.productForm.reset()
-          this._router.navigate(['products'])
-        },
-        error : err => {
-        this._snackBar.openSnackBar(err.msg)      
-        }
-      })
+        .subscribe({
+          next: res => {
+            this._snackBar.openSnackBar(res.msg)
+            this.isInEditMode = false
+            this.productForm.reset()
+            this._router.navigate(['products'])
+          },
+          error: err => {
+            this._snackBar.openSnackBar(err.msg)
+          }
+        })
     }
   }
 

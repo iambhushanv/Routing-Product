@@ -8,55 +8,69 @@ import { ProductComponent } from './shared/components/products-dashboard/product
 import { ProductFormComponent } from './shared/components/products-dashboard/product-form/product-form.component';
 import { UserFormComponent } from './shared/components/user-dashboard/user-form/user-form.component';
 import { UserDetailsComponent } from './shared/components/user-dashboard/user-details/user-details.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
 
   {
-    path : 'home',
-    component : HomeDashboardComponent
+    path: 'home',
+    component: HomeDashboardComponent
   },
-    {
-    path : '',
-    redirectTo : 'home',
-    pathMatch : 'full'
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
   },
-   {
-    path : 'products',
-    component : ProductsDashboardComponent
+  {
+    path: 'products',
+    component: ProductsDashboardComponent,
+    children: [
+      {
+        path: 'addProduct',
+        component: ProductFormComponent
+      },
+      {
+        path: ':id',
+        component: ProductComponent
+      },
+      {
+        path: ':id/edit',
+        component: ProductFormComponent
+      },
+    ]
   },
-   {
-    path : 'products/addProduct',
-    component : ProductFormComponent
+  {
+    path: 'fairs',
+    component: FairsDashboardComponent
   },
-   {
-    path : 'products/:id',
-    component : ProductComponent
+  {
+    path: 'user',
+    component: UserDashboardComponent,
+    children : [
+      
+  {
+    path: 'addUser',
+    component: UserFormComponent
   },
-   {
-    path : 'products/:id/edit',
-    component : ProductFormComponent
+  {
+    path: ':userId',
+    component: UserDetailsComponent
   },
-   {
-    path : 'fairs',
-    component : FairsDashboardComponent
+  {
+    path: ':userId/edit',
+    component: UserFormComponent
+  }
+    ]
   },
-    {
-    path : 'user',
-    component : UserDashboardComponent
+  {
+    path: 'Page-Not-Found',
+    component: PageNotFoundComponent
   },
-   {
-    path : 'user/addUser',
-    component : UserFormComponent
-  },
-   {
-    path : 'user/:userId',
-    component : UserDetailsComponent
-  },
-   {
-    path : 'user/:userId/edit',
-    component : UserFormComponent
-  },
-  
+  {
+    path: '**',
+    redirectTo: 'Page-Not-Found'
+  }
+
 ];
 
 @NgModule({

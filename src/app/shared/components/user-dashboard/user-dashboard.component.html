@@ -6,10 +6,12 @@
          mat-raised-button color="primary">Add User</button>
     </div>
     <div class="col-md-4">
-        <ul class="list-group">
+        <ul class="list-group" *ngIf="userArr.length > 0; else noUsers">
             <li
             [routerLink]="[user.userId]"
-             class="list-group-item" *ngFor="let user of userArr">
+            routerLinkActive="active"
+            [queryParams]="{ur : user.userRole}"
+             class="list-group-item" *ngFor="let user of userArr; trackBy : trackByFun">
                 {{user.userName}}
                  <small class="badge"
                 [ngClass]="{
@@ -20,8 +22,13 @@
                 {{user.userId}}
             </li>
         </ul>
+        <ng-template #noUsers>
+            <p class="alert alert-info">
+                No Users !!!
+            </p>
+        </ng-template>
     </div>
     <div class="col-md-8">
-        USERS_DETAILS
+    <router-outlet></router-outlet>
     </div>
 </div>

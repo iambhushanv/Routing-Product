@@ -20,6 +20,7 @@ import { GetConfirmComponent } from './shared/components/products-dashboard/prod
 import { UserDetailsComponent } from './shared/components/user-dashboard/user-details/user-details.component';
 import { UserFormComponent } from './shared/components/user-dashboard/user-form/user-form.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 
 
@@ -35,7 +36,8 @@ import {MatChipsModule} from '@angular/material/chips';
     ProductFormComponent,
     GetConfirmComponent,
     UserDetailsComponent,
-    UserFormComponent
+    UserFormComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

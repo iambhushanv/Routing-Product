@@ -61,13 +61,18 @@
                         </div>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-sm btn-danger" type="button">Remove</button>
+                        <button
+                         [disabled]="editUser.userRole === 'Candidate'" 
+                         class="btn btn-sm btn-danger" type="button">Remove</button>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-12">
-                        <button [disabled]="formControls['skills'].invalid" (click)="addSkillControl()"
-                            class="btn btn-sm btn-primary" color="primary" type="button">Add Skills</button>
+                        <button
+                      [disabled]="formControls['skills'].invalid" (click)="addSkillControl()"
+                            class="btn btn-sm btn-primary" color="primary" type="button"
+                      [disabled]="editUser.userRole === 'Candidate'" 
+                            >Add Skills</button>
                     </div>
                 </div>
             </div>
@@ -166,7 +171,11 @@
                 </div>
             </div>
 
-            <button mat-raised-button color="primary" type="submit">Add User</button>
+            <button *ngIf="!isInEditMode" mat-raised-button color="primary" type="submit">Add User</button>
+            <button
+            [disabled]="editUser.userRole === 'Candidate'"
+            (click)="onUpdate()"
+             *ngIf="isInEditMode" mat-raised-button color="warn" type="button">Update User</button>
         </form>
     </mat-card-content>
 </mat-card>

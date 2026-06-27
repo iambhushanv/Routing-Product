@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { Iproduct } from 'src/app/shared/models/product';
 import { ProductsService } from 'src/app/shared/services/products.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
@@ -28,10 +28,9 @@ export class ProductComponent implements OnInit {
   }
 
   getProduct() {
-    this._route.params.subscribe(param => {
+    this._route.params.subscribe((param: Params )=> {
       this.productId = param['id']
-    })
-    if (this.productId) {
+         if (this.productId) {
       this._productService.fetchProductById(this.productId)
         .subscribe({
           next: res => {
@@ -41,7 +40,8 @@ export class ProductComponent implements OnInit {
             console.log(err);
           }
         })
-    }
+      }   
+    })
   }
 
   onRemove() {

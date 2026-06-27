@@ -14,8 +14,12 @@
             <p>{{userDetails.profileDescription}}</p>
 
             <mat-card-actions class="d-flex justify-content-between">
-                <button routerLink="edit" mat-raised-button color="primary">Edit</button>
-                <button mat-raised-button color="warn">Remove</button>
+                <button
+                [queryParamsHandling]="'preserve'"
+                 routerLink="edit" mat-raised-button color="primary">Edit</button>
+                <button
+                (click)="onRemove()"
+                 mat-raised-button color="warn">Remove</button>
             </mat-card-actions>
         </mat-card>
     </div>

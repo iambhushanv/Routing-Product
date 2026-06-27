@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Iuser } from 'src/app/shared/models/user';
+import { FormUtilityService } from 'src/app/shared/services/form-utility.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { UsersService } from 'src/app/shared/services/users.service';
 
@@ -13,14 +14,15 @@ import { UsersService } from 'src/app/shared/services/users.service';
 export class UserFormComponent implements OnInit {
   isInEditMode: boolean = false
   userForm !: FormGroup
-  editUserInfo !: Iuser
+  editUser = {} as Iuser
   userId !: string
 
   constructor(
-    private _userService : UsersService,
-    private _snackBar : SnackBarService,
-    private _router : Router,
-    private _routes : ActivatedRoute
+    private _userService: UsersService,
+    private _snackBar: SnackBarService,
+    private _router: Router,
+    private _routes: ActivatedRoute,
+    private _formUtilityService: FormUtilityService
   ) { }
 
   ngOnInit(): void {
@@ -28,44 +30,65 @@ export class UserFormComponent implements OnInit {
     this.addSkillControl()
     this.isAddSameHandler()
     this.currentAddressHandler()
-
-    this.userId = this._routes.snapshot.paramMap.get('userId')!
-    if(this.userId){
-      this._userService.fetchUserById(this.userId)
-      .subscribe({
-        next : res => {
-          this.editUserInfo = res 
-          console.log(this.editUserInfo);
-          
-          this.userForm.patchValue(this.editUserInfo)
-        },
-        error : err => {
-          console.log(err);        
-        }
-      })
-    }
+    this.patchData()
   }
 
-  currentAddressHandler(){  
+  patchData() {
+    this._routes.params.subscribe(param => {
+      this.userId = param['userId']
+       if (this.userId) {
+      this.isInEditMode = true
+      this._userService.fetchUserById(this.userId)
+        .subscribe({
+          next: res => {
+            this.editUser = res
+            this.userForm.patchValue(this.editUser)
+            this._formUtilityService.patchFormArr(res.skills, this.skillsArr)
+
+            if(this.editUser.userRole === 'Candidate'){
+              this.userForm.disable()
+            }
+
+            if (this.formControls['address'].get('current')?.valid) {
+              this.formControls['isAddSame'].enable()
+              this.formControls['address'].get('permanent')?.patchValue(this.editUser.address.permanent)
+            }
+          },
+          error: err => {
+            console.log(err);
+          }
+        })
+    }
+    })
+  }
+
+  currentAddressHandler() {
     this.formControls['isAddSame'].valueChanges
       .subscribe(val => {
         if (val) {
           let currentAddVal = this.formControls['address'].get('current')?.value
           this.formControls['address'].get('permanent')?.patchValue(currentAddVal)
           this.formControls['address'].get('permanent')?.disable()
-        } else {
+        }
+        else if (this.isInEditMode && !val) {
+          this.formControls['address'].get('permanent')?.patchValue(this.editUser.address.permanent)
+          this.formControls['address'].get('permanent')?.enable()
+        }
+
+        else {
           this.formControls['address'].get('permanent')?.reset()
           this.formControls['address'].get('permanent')?.enable()
         }
       })
   }
 
-  isAddSameHandler(){
-       this.formControls['address'].get('current')?.valueChanges
+  isAddSameHandler() {
+    this.formControls['address'].get('current')?.valueChanges
       .subscribe(val => {
         if (this.formControls['address'].get('current')?.valid) {
           this.formControls['isAddSame'].enable()
-        } else {
+        }
+        else {
           this.formControls['isAddSame'].reset()
           this.formControls['isAddSame'].disable()
         }
@@ -115,22 +138,40 @@ export class UserFormComponent implements OnInit {
   }
 
   onAddUser() {
-     if(this.userForm.invalid){
+    if (this.userForm.invalid) {
       this.userForm.markAllAsTouched()
-     }else{
-    let userDetails: Iuser = {...this.userForm.getRawValue(), userId: Date.now().toString()}
+    } else {
+      let userDetails: Iuser = { ...this.userForm.getRawValue(), userId: Date.now().toString() }
       this._userService.addUser(userDetails)
+        .subscribe({
+          next: res => {
+            this._snackBar.openSnackBar(res.msg)
+            this._router.navigate(['/user'])
+          },
+          error: err => {
+            this._snackBar.openSnackBar(err.msg)
+          }
+        })
+
+    }
+  }
+
+  onUpdate(){
+    if(this.userForm.invalid){
+      this.userForm.markAllAsTouched()
+    }else{
+      let updateObj : Iuser = {...this.userForm.value, userId : this.editUser.userId}
+      this._userService.onUpdate(updateObj)
       .subscribe({
-        next : res => {
+        next: res => {
           this._snackBar.openSnackBar(res.msg)
-          this._router.navigate(['/user'])
+          this._router.navigate(['user'])
         },
         error : err => {
           this._snackBar.openSnackBar(err.msg)
         }
       })
-
-     }
+    }
   }
 
 }

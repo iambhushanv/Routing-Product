@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Iuser } from '../models/user';
 import { Observable, of } from 'rxjs';
+import { Ires } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,24 @@ export class UsersService {
     return of({
       msg : `The new user with id ${obj.userId} is added successfully !!!`,
       data : obj
+    })
+  }
+
+  onUpdate(obj : Iuser): Observable<Ires<Iuser>>{
+    let getIndex = this.usersArr.findIndex(u => u.userId === obj.userId)
+    this.usersArr[getIndex] = obj
+      return of({
+      msg : `The user with id ${obj.userId} is updated successfully !!!`,
+      data : obj
+    })
+  }
+
+   onRemove(id: string){
+    let getIndex = this.usersArr.findIndex(u => u.userId === id)
+    let arr = this.usersArr.splice(getIndex, 1)
+     return of({
+      msg: `The user with id ${id} is removed successfully !!!`,
+      data : arr[0]
     })
   }
 }

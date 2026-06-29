@@ -71,7 +71,7 @@ export class UsersService {
     return of(userObj)
   }
 
-  addUser(obj: Iuser){
+  addUser(obj: Iuser): Observable<Ires<Iuser>>{
     this.usersArr.unshift(obj)
     return of({
       msg : `The new user with id ${obj.userId} is added successfully !!!`,
@@ -88,7 +88,7 @@ export class UsersService {
     })
   }
 
-   onRemove(id: string){
+   onRemove(id: string): Observable<Ires<Iuser>>{
     let getIndex = this.usersArr.findIndex(u => u.userId === id)
     let arr = this.usersArr.splice(getIndex, 1)
      return of({

@@ -4,9 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Iuser } from 'src/app/shared/models/user';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { GetConfirmComponent } from '../../products-dashboard/product/get-confirm/get-confirm.component';
-import { config } from 'rxjs';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
-
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
@@ -58,7 +56,7 @@ export class UserDetailsComponent implements OnInit {
         .subscribe({
           next : res => {
             this._snackBar.openSnackBar(res.msg)
-            this._router.navigate(['user'])
+            this._router.navigate(['users'])
           },
           error : err => {
             this._snackBar.openSnackBar(err.msg)

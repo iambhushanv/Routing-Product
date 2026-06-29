@@ -45,7 +45,7 @@ export class ProductsService {
     })
   }
 
-  onUpdate(obj:Iproduct){
+  onUpdate(obj:Iproduct) :Observable<Ires<Iproduct>>{
     let getIndex = this.productsArr.findIndex(p => p.pid === obj.pid)
     this.productsArr[getIndex] = obj
      return of({
@@ -54,7 +54,7 @@ export class ProductsService {
     })
   }
 
-  onRemove(id: string){
+  onRemove(id: string): Observable<Ires<Iproduct>>{
     let getIndex = this.productsArr.findIndex(p => p.pid === id)
     let arr = this.productsArr.splice(getIndex, 1)
      return of({

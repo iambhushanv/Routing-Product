@@ -160,7 +160,7 @@ export class UserFormComponent implements OnInit {
     if(this.userForm.invalid){
       this.userForm.markAllAsTouched()
     }else{
-      let updateObj : Iuser = {...this.userForm.value, userId : this.editUser.userId}
+      let updateObj : Iuser = {...this.userForm.getRawValue(), userId : this.editUser.userId}
       this._userService.onUpdate(updateObj)
       .subscribe({
         next: res => {

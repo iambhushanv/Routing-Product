@@ -21,6 +21,9 @@ import { UserDetailsComponent } from './shared/components/user-dashboard/user-de
 import { UserFormComponent } from './shared/components/user-dashboard/user-form/user-form.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { AuthComponent } from './shared/components/auth/auth.component';
+import { FairDetailComponent } from './shared/components/fairs-dashboard/fair-detail/fair-detail.component';
+import { FairCardComponent } from './shared/components/fairs-dashboard/fair-card/fair-card.component';
 
 
 
@@ -37,7 +40,10 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
     GetConfirmComponent,
     UserDetailsComponent,
     UserFormComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    AuthComponent,
+    FairDetailComponent,
+    FairCardComponent
   ],
   imports: [
     BrowserModule,

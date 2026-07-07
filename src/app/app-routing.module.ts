@@ -9,18 +9,23 @@ import { ProductFormComponent } from './shared/components/products-dashboard/pro
 import { UserFormComponent } from './shared/components/user-dashboard/user-form/user-form.component';
 import { UserDetailsComponent } from './shared/components/user-dashboard/user-details/user-details.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { AuthComponent } from './shared/components/auth/auth.component';
+import { FairDetailComponent } from './shared/components/fairs-dashboard/fair-detail/fair-detail.component';
 
 const routes: Routes = [
-
+  {
+    path: '',
+    component: AuthComponent
+  },
   {
     path: 'home',
     component: HomeDashboardComponent
   },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: '',
+  //   redirectTo: 'home',
+  //   pathMatch: 'full'
+  // },
   {
     path: 'products',
     component: ProductsDashboardComponent,
@@ -41,25 +46,31 @@ const routes: Routes = [
   },
   {
     path: 'fairs',
-    component: FairsDashboardComponent
+    component: FairsDashboardComponent,
+    children: [
+      {
+        path: ':fairId',
+        component: FairDetailComponent
+      }
+    ],
   },
   {
     path: 'user',
     component: UserDashboardComponent,
-    children : [
-      
-  {
-    path: 'addUser',
-    component: UserFormComponent
-  },
-  {
-    path: ':userId',
-    component: UserDetailsComponent
-  },
-  {
-    path: ':userId/edit',
-    component: UserFormComponent
-  }
+    children: [
+
+      {
+        path: 'addUser',
+        component: UserFormComponent
+      },
+      {
+        path: ':userId',
+        component: UserDetailsComponent
+      },
+      {
+        path: ':userId/edit',
+        component: UserFormComponent
+      }
     ]
   },
   {

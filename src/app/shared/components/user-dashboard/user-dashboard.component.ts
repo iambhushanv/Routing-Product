@@ -3,6 +3,7 @@ import { Iuser } from '../../models/user';
 import { UsersService } from '../../services/users.service';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -14,7 +15,8 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     private _userService : UsersService,
     private _snackBar : SnackBarService,
-    private _router : Router
+    private _router : Router,
+    private _authService : AuthService
   ) { }
 
   ngOnInit(): void {
@@ -26,11 +28,11 @@ export class UserDashboardComponent implements OnInit {
     .subscribe({
       next : res => {
         this.userArr = res
-        if(this.userArr.length > 0){
-            this._router.navigate(['/user', this.userArr[0].userId],
-              {queryParams : {ur : this.userArr[0].userRole}}
-            )
-        }
+        // if(this.userArr.length > 0 && this._authService.getToken()){
+        //     this._router.navigate(['/user', this.userArr[0].userId],
+        //       {queryParams : {ur : this.userArr[0].userRole}}
+        //     )
+        // }
       },
       error : err => {
       this._snackBar.openSnackBar(err)

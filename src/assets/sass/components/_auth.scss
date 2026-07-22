@@ -1,8 +1,19 @@
-main.main {
+.main-auth {
     position: fixed;
     background: orange;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    .ng-invalid.ng-touched,
+    .ng-invalid.ng-dirty{
+       border:  2px solid red ;
+    }
+
 }

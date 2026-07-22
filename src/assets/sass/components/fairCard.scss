@@ -1,3 +1,5 @@
+@import "../abstract/_var.scss";
+
 .FairCard {
   cursor: pointer;
   position: relative;
@@ -8,8 +10,8 @@
 
   }
   .typeAndDate {
-    background-color: white;
-    color: #000;
+    background-color: $color-white;
+    color: $color-dark;
     border-radius: 5px;
     padding: 15px;
   }
@@ -18,7 +20,7 @@
   content: '';
   width: 20px;
   height: 20px;
-  background-color: #156e72;
+  background-color: $color-sec-green;
   position: absolute;
   top: calc(50% - 10px);
   right: -10px;

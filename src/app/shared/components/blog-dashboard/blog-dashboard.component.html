@@ -1,0 +1,16 @@
+
+<div class="row">
+    <div class="col-md-12 text-right">
+        <button routerLink="addBlog" mat-raised-button color="primary" class="mb-3">Add Blog</button>
+    </div>
+</div>
+<div class="row" *ngIf="blogsArr.length > 0 else noblogs">
+    <div class="col-md-4 mb-3" *ngFor="let blog of blogsArr; trackBy: trackByFun">
+        <app-blog-card [blog]="blog"></app-blog-card>
+    </div>
+</div>
+<ng-template #noblogs>
+    <p class="alert alert-info">
+        No Blogs !!!
+    </p>
+</ng-template>

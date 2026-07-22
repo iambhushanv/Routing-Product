@@ -1,0 +1,11 @@
+
+export interface IloginUser {
+    email: string
+    password: string
+}
+
+export interface IregisterUser {
+    email: string
+    password: string
+    userRole : 'admin' | 'buyer' | 'SuperAdmin'
+}

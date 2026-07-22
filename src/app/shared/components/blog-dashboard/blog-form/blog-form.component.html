@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>{{isInEditMode? 'Update Blog': 'Add Blog'}}</h3>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="blogForm" (ngSubmit)="onBlogAdd()">
+                    <div class="form-group">
+                        <label for="title">Title*</label>
+                        <input id="title" formControlName="title" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="body">Content*</label>
+                        <textarea id="body" rows="4" formControlName="body" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="userId">User Id*</label>
+                        <select id="userId" formControlName="userId" class="form-control">
+                            <option [ngValue]="val" *ngFor="let val of [1,2,3,4,5,6,7,8,9,10]">
+                                {{val}}
+                            </option>
+                        </select>
+                    </div>
+                    <button *ngIf="!isInEditMode" mat-raised-button color="primary" type="submit" [disabled]="blogForm.invalid" class="btn-block">Add Blog</button>
+                    <button (click)="onUpdate()" *ngIf="isInEditMode" mat-raised-button color="warn" type="button" [disabled]="blogForm.invalid" class="btn-block">Update Blog</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

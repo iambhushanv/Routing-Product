@@ -10,7 +10,7 @@ import { FairService } from 'src/app/shared/services/fair.service';
 })
 export class FairDetailComponent implements OnInit {
  fairId!: string;
-  fairObj!: Ifair;
+ fairObj!: Ifair;
 
   constructor(
     private _activatedRoute: ActivatedRoute,

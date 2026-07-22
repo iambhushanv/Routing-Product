@@ -1,0 +1,11 @@
+<div class="card h-100">
+    <div class="card-header">
+        {{blog.title}}
+    </div>
+    <div class="card-body">
+        {{blog.body}}
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <button [routerLink]="blog.id" mat-raised-button color="primary" class="btn-block">Read More...</button>
+    </div>
+</div>

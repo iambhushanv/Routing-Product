@@ -21,7 +21,12 @@ export class ProductComponent implements OnInit {
     private _router: Router,
     private _snackBar: SnackBarService,
     private _matDialog: MatDialog
-  ) { }
+  ) { 
+      this._route.data
+      .subscribe( res => {
+        this.productObj = res['product']
+      })    
+  }
 
   ngOnInit(): void {
     this.getProduct()

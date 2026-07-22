@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IcanDeactivate } from 'src/app/shared/models/canDeactivate';
 import { Iuser } from 'src/app/shared/models/user';
 import { FormUtilityService } from 'src/app/shared/services/form-utility.service';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
@@ -11,7 +12,7 @@ import { UsersService } from 'src/app/shared/services/users.service';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, IcanDeactivate {
   isInEditMode: boolean = false
   userForm !: FormGroup
   editUser = {} as Iuser
@@ -172,6 +173,15 @@ export class UserFormComponent implements OnInit {
         }
       })
     }
+  }
+
+  canDeactivate(){
+    // form dirty and isInEditMode = true
+    if(this.userForm.dirty && this.isInEditMode){
+      let getCofirmation = confirm(`Are you sure, you want to discard the changes?`)
+      return getCofirmation
+    }
+    return true
   }
 
 }

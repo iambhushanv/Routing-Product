@@ -1,0 +1,17 @@
+
+<div class="card" *ngIf="blogObj">
+    <div class="card-header">
+        <h1 class="font-weight-bold">
+            {{blogObj.title}}
+        </h1>
+    </div>
+    <div class="card-body">
+        <p class="m-0">
+            {{blogObj.body}}
+        </p>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <button routerLink="edit" mat-mini-fab color="primary"><mat-icon>edit</mat-icon></button>
+        <button (click)="onRemove()"  mat-mini-fab color="warn"><mat-icon>delete</mat-icon></button>
+    </div>
+</div>

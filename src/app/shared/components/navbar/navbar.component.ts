@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { Router, RouteReuseStrategy } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _authService : AuthService,
+    private _snackBar : SnackBarService,
+    private _router : Router
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  onLogOut(){
+    this._authService.logout()
+    .subscribe({
+      next : res => {
+        this._snackBar.openSnackBar(res.msg)
+        this._router.navigate([''])
+      },
+      error : err => {
+        this._snackBar.openSnackBar(err.msg)
+      }
+    })
   }
 
 }

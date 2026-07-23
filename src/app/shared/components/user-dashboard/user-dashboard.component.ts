@@ -28,11 +28,11 @@ export class UserDashboardComponent implements OnInit {
     .subscribe({
       next : res => {
         this.userArr = res
-        // if(this.userArr.length > 0 && this._authService.getToken()){
-        //     this._router.navigate(['/user', this.userArr[0].userId],
-        //       {queryParams : {ur : this.userArr[0].userRole}}
-        //     )
-        // }
+        if(this.userArr.length > 0 && this._authService.getToken()){
+            this._router.navigate(['/user', this.userArr[0].userId],
+              {queryParams : {ur : this.userArr[0].userRole}}
+            )
+        }
       },
       error : err => {
       this._snackBar.openSnackBar(err)

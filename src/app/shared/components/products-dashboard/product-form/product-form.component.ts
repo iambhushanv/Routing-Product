@@ -1,122 +1,124 @@
-  import { Component, OnInit } from '@angular/core';
-  import { flush } from '@angular/core/testing';
-  import { FormControl, FormGroup, Validators } from '@angular/forms';
-  import { ActivatedRoute, Router } from '@angular/router';
-  import { IcanDeactivate } from 'src/app/shared/models/canDeactivate';
-  import { Iproduct } from 'src/app/shared/models/product';
-  import { ProductsService } from 'src/app/shared/services/products.service';
-  import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IcanDeactivate } from 'src/app/shared/models/canDeactivate';
+import { Iproduct } from 'src/app/shared/models/product';
+import { ProductsService } from 'src/app/shared/services/products.service';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 
-  @Component({
-    selector: 'app-product-form',
-    templateUrl: './product-form.component.html',
-    styleUrls: ['./product-form.component.scss']
-  })
-  export class ProductFormComponent implements OnInit, IcanDeactivate {
-    isInEditMode: boolean = false
-    productForm !: FormGroup
-    productId !: string
-    productObj !: Iproduct
-    disableUpdateBtn: boolean = false
+@Component({
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html',
+  styleUrls: ['./product-form.component.scss']
+})
+export class ProductFormComponent implements OnInit, IcanDeactivate {
+  isInEditMode: boolean = false
+  productForm !: FormGroup
+  productId !: string
+  productObj !: Iproduct
+  disableUpdateBtn: boolean = false
 
-    constructor(
-      private _productService: ProductsService,
-      private _router: Router,
-      private _routes: ActivatedRoute,
-      private _snackBar: SnackBarService
-    ) { }
+  constructor(
+    private _productService: ProductsService,
+    private _router: Router,
+    private _routes: ActivatedRoute,
+    private _snackBar: SnackBarService
+  ) { }
 
-    ngOnInit(): void {
-      this.createProductForm()
-      this.patchProductData()
-      this.CanReturnHandler()
+  ngOnInit(): void {
+    this.createProductForm()
+    this.patchProductData()
+    this.CanReturnHandler()
+  }
+
+  CanReturnHandler() {
+    this._routes.queryParams
+      .subscribe(res => {
+        if (res['cr'] == 0) {
+          this.productForm.disable()
+          this.disableUpdateBtn = true
+        } else {
+          this.productForm.enable()
+          this.disableUpdateBtn = false
+        }
+
+      })
+  }
+
+  patchProductData() {
+    this.productId = this._routes.snapshot.paramMap.get('id')!
+    if (this.productId) {
+      this.isInEditMode = true
     }
+    this._productService.fetchProductById(this.productId)
+      .subscribe({
+        next: res => {
+          this.productForm.patchValue(res)
+        }
+      })
+  }
 
-    CanReturnHandler() {
-        this._routes.queryParams
-        .subscribe(res => {
-          if (res['cr'] == 0) {
-            this.productForm.disable()
-            this.disableUpdateBtn = true
-          } else {
-            this.productForm.enable()
-            this.disableUpdateBtn = false
-          }
+  createProductForm() {
+    this.productForm = new FormGroup({
+      pname: new FormControl(null, [Validators.required]),
+      pstatus: new FormControl('In-Progress'),
+      canReturn: new FormControl(1,),
+    })
+  }
 
-        })
-    }
+  get formControls() {
+    return this.productForm.controls
+  }
 
-    patchProductData() {
-      this.productId = this._routes.snapshot.paramMap.get('id')!
-      if (this.productId) {
-        this.isInEditMode = true
-      }
-      this._productService.fetchProductById(this.productId)
+  onProductAdd() {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched()
+    } else {
+      let productObj: Iproduct = { ...this.productForm.value, pid: Date.now().toString() }
+      this._productService.createProduct(productObj)
         .subscribe({
           next: res => {
-            this.productForm.patchValue(res)
+            this._snackBar.openSnackBar(res.msg)
+            this.productForm.reset()
+            this._router.navigate(['products'])
+          },
+          error: err => {
+            this._snackBar.openSnackBar(err.msg)
           }
         })
     }
-
-    createProductForm() {
-      this.productForm = new FormGroup({
-        pname: new FormControl(null, [Validators.required]),
-        pstatus: new FormControl('In-Progress'),
-        canReturn: new FormControl(1,),
-      })
-    }
-
-    get formControls(){
-      return this.productForm.controls 
-    }
-
-    onProductAdd() {
-      if (this.productForm.invalid) {
-        this.productForm.markAllAsTouched()
-      } else {
-        let productObj: Iproduct = { ...this.productForm.value, pid: Date.now().toString() }
-        this._productService.createProduct(productObj)
-          .subscribe({
-            next: res => {
-              this._snackBar.openSnackBar(res.msg)
-              this.productForm.reset()
-              this._router.navigate(['products'])
-            },
-            error: err => {
-              this._snackBar.openSnackBar(err.msg)
-            }
-          })
-      }
-    }
-
-    onUpdate() {
-      if (this.productForm.invalid) {
-        this.productForm.markAllAsTouched()
-      } else {
-        let updatedObj: Iproduct = { ...this.productForm.value, pid: this.productId }
-        this._productService.onUpdate(updatedObj)
-          .subscribe({
-            next: res => {
-              this._snackBar.openSnackBar(res.msg)
-              this.isInEditMode = false
-              this.productForm.reset()
-              this._router.navigate(['products'])
-            },
-            error: err => {
-              this._snackBar.openSnackBar(err.msg)
-            }
-          })
-      }
-    }
-
-    canDeactivate(){
-      // form dirty and isInEditMode = true
-      if(this.productForm.dirty && this.isInEditMode){
-        let getCofirmation = confirm(`Are you sure, you want to discard the changes?`)
-        return getCofirmation
-      }
-      return true
-    }
-
   }
+
+  onUpdate() {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched()
+    } else {
+      let updatedObj: Iproduct = { ...this.productForm.value, pid: this.productId }
+      this._productService.onUpdate(updatedObj)
+        .subscribe({
+          next: res => {
+            this._snackBar.openSnackBar(res.msg)
+            this.isInEditMode = false
+            this.productForm.reset()
+            this._router.navigate(
+              ['/products', updatedObj.pid],
+              { queryParams: { cr: updatedObj.canReturn } }
+            )
+          },
+          error: err => {
+            this._snackBar.openSnackBar(err.msg)
+          }
+        })
+    }
+  }
+
+  canDeactivate() {
+    // form dirty and isInEditMode = true
+    if (this.productForm.dirty && this.isInEditMode) {
+      let getCofirmation = confirm(`Are you sure, you want to discard the changes?`)
+      return getCofirmation
+    }
+    return true
+  }
+
+}

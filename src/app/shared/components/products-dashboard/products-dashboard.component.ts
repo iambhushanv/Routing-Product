@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductsService } from '../../services/products.service'; 
+import { ProductsService } from '../../services/products.service';
 import { Iproduct } from '../../models/product';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,22 +11,29 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductsDashboardComponent implements OnInit {
   getProductsArr !: Array<Iproduct>
   constructor(
-    private productsService : ProductsService,
-    private _router : Router,
-    private _routes : ActivatedRoute
-  ) { 
+    private productsService: ProductsService,
+    private _router: Router,
+    private _routes: ActivatedRoute
+  ) {
     console.log(_routes);
     this.getProductsArr = _routes.snapshot.data['product']
-    
+
   }
 
   ngOnInit(): void {
     // this.fetchProduct()
-  }
+      if(!this._routes.firstChild && this.getProductsArr?.length > 0) {
+      this._router.navigate(
+        ['/products', this.getProductsArr[0].pid],
+        { queryParams: { cr: this.getProductsArr[0].canReturn } }
+      );
+    }
+  
+}
 
-  trackByFun(index: number, product : Iproduct){
-    return product.pid
-  }
+trackByFun(index: number, product : Iproduct){
+  return product.pid
+}
 
   // fetchProduct(){
   //   this.productsService.fetchProduct()

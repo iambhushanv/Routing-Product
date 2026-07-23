@@ -74,6 +74,7 @@ export class UserFormComponent implements OnInit, IcanDeactivate {
         else if (this.isInEditMode && !val) {
           this.formControls['address'].get('permanent')?.patchValue(this.editUser.address.permanent)
           this.formControls['address'].get('permanent')?.enable()
+          this.formControls['address'].get('permanent')?.reset()
         }
 
         else {
@@ -170,7 +171,12 @@ export class UserFormComponent implements OnInit, IcanDeactivate {
       .subscribe({
         next: res => {
           this._snackBar.openSnackBar(res.msg)
-          this._router.navigate(['user'])
+          this.userForm.reset()
+          this.isInEditMode = false
+          this._router.navigate(['user', updateObj.userId],
+            { queryParams : {ur : updateObj.userRole} }
+          )
+
         },
         error : err => {
           this._snackBar.openSnackBar(err.msg)

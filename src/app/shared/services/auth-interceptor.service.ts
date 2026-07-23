@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private _spinnerService = inject(SpinnerService)
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+        this._spinnerService.emitLoadingFlag(true)
         if (req.url.includes('login') || req.url.includes('signup')) {
             return next.handle(req).pipe(
                 finalize(() => {
@@ -18,7 +18,6 @@ export class AuthInterceptor implements HttpInterceptor {
                 })
             )
         }
-        this._spinnerService.emitLoadingFlag(true)
 
         const reqClone = req.clone({
             setHeaders: {

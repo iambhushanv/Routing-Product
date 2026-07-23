@@ -138,6 +138,10 @@ export class UserFormComponent implements OnInit, IcanDeactivate {
     return this.formControls['skills'] as FormArray
   }
 
+  onRemoveSkill(i : number){
+    this.skillsArr.removeAt(i)
+  }
+
   onAddUser() {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched()

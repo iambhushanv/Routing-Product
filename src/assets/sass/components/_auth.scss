@@ -16,4 +16,25 @@ form{
        border:  2px solid red ;
     }
 
+    label{
+        font-weight: 700;
+    }
+}
+
+.password-wrapper{
+    position: relative;
+
+    input{
+        padding-right: 40px;
+    }
+
+    .toggle-icon{
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        user-select: none;
+    }
 }

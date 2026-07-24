@@ -10,7 +10,14 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password*</label>
-                        <input type="text" formControlName="password" class="form-control">
+                        <div class="password-wrapper">
+                            <input  
+                            [type]="hidePassword ? 'password' : 'text' "
+                            formControlName="password" class="form-control">
+                            <mat-icon (click)="togglePasswordVisibility()" class="toggle-icon">
+                                {{hidePassword ? 'visibility_off' : 'visibility'}}
+                            </mat-icon>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="userRole">User Role*</label>
@@ -28,10 +35,9 @@
     </ng-container>
     
     <ng-container *ngIf="allReadyHasAccount">
-
         <div class="card">
             <div class="card-body">
-                <h3 class="font-weight-bold">Log IN</h3>
+                <h3 class="font-weight-bold">Log In</h3>
                 <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
                     <div class="form-group">
                         <label for="email">E-mail*</label>
@@ -39,10 +45,17 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password*</label>
-                        <input type="text" formControlName="password" class="form-control">
+                         <div class="password-wrapper">
+                            <input  
+                            [type]="hidePassword ? 'password' : 'text' "
+                            formControlName="password" class="form-control">
+                            <mat-icon (click)="togglePasswordVisibility()" class="toggle-icon">
+                                {{hidePassword ? 'visibility_off' : 'visibility'}}
+                            </mat-icon>
+                        </div>
                     </div>
 
-                    <button mat-raised-button color="primary" type="submit" class="w-100 mb-2">Login</button>
+                    <button mat-raised-button color="primary" type="submit" class="w-100 mb-2">Log In</button>
 
                 </form>
 

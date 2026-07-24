@@ -15,6 +15,7 @@ export class AuthComponent implements OnInit {
   allReadyHasAccount: boolean = false
   loginForm !: FormGroup
   signUpForm !: FormGroup
+  hidePassword : boolean = true
 
   constructor(
     private _authService: AuthService,
@@ -95,6 +96,10 @@ export class AuthComponent implements OnInit {
         })
 
     }
+  }
+
+  togglePasswordVisibility(){
+    this.hidePassword = !this.hidePassword
   }
 
 }
